@@ -1,0 +1,9 @@
+@use "src/styles/mixins";
+@use "src/styles/theme";
+@include mixins.generate-styles("margin-bottom", "margin-bottom", rem, 50, 100);
+@include mixins.generate-styles("margin-right", "margin-right", rem, 50, 100);
+@include mixins.generate-styles("margin-left", "margin-left", rem, 50, 100);
+@include mixins.generate-styles("margin-top", "margin-top", rem, 50, 150);
+@include theme.generate-theme-classes("bg", "background");
+@include theme.generate-theme-classes("cl", "color");
+@include theme.generate-theme-classes("cl", "color");

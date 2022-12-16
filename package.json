@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 192.168.80.11 --port 4400",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -18,7 +18,9 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "leaflet": "^1.9.3",
     "rxjs": "~7.5.0",
+    "sweetalert2": "^11.6.15",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
@@ -27,6 +29,7 @@
     "@angular/cli": "~13.3.9",
     "@angular/compiler-cli": "~13.3.0",
     "@types/jasmine": "~3.10.0",
+    "@types/leaflet": "^1.9.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",

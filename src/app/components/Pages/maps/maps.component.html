@@ -1,0 +1,84 @@
+<div class="row primary-content primary-typography">
+  <div class="col l3 m3 s12">
+    <div class="sidebar padding text-align-center">
+      <h5 class="title-style">Menú</h5>
+      <ng-container *ngFor="let card of listCards; index as i">
+        <div class="col s12 m12 l12 margin-bottom-100-rem">
+          <div class="primary-card display-flex align-items-center border-card hoverable-card"
+            (click)="idCardSelected = card" [ngStyle]="{'border-color':card.color + '66',
+              background: card.color + '66' }">
+            <p
+              class="text-style margin-vertical-0 lower-font font-weight-700-important cl-primary-color-theme-important">
+              {{ card.name }}
+            </p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="col l9 m9 s12 text-align-center align-items-center display-flex flex-direction-row margin-top-100-rem">
+    <ng-container *ngIf="idCardSelected.id == 0">
+      <div class="primary-card">
+        <h5 class="title-style">{{idCardSelected.name }}</h5>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="idCardSelected.id == 1">
+      <div class="primary-card">
+        <div class="row">
+          <div class="col l4 m2 s12">
+            <div class="row display-flex justify-content-center flex-direction-row">
+              <div class="col l12" [formGroup]="formCreateMarker">
+                <h1 class="subtitle-style text-align-center cl-primary-color-theme-important">
+                  Insertar marcador
+                </h1>
+                <div class="col s12 l12 margin-bottom-100-rem">
+                  <div class="col s12 l6">
+                    <label class="text-style cl-primary-color-theme-important">Latitud</label>
+                    <label class="primary-form-field width-100">
+                      <input type="text" class="primary-input" formControlName="lat" #lat>
+                      <ng-container [ngTemplateOutlet]="required"></ng-container>
+                    </label>
+                  </div>
+                  <div class="col s12 l6">
+                    <label class="text-style cl-primary-color-theme-important">Longitud</label>
+                    <label class="primary-form-field width-100">
+                      <input type="text" class="primary-input" formControlName="lon" #lon>
+                      <ng-container [ngTemplateOutlet]="required"></ng-container>
+                    </label>
+                  </div>
+                </div>
+                <div class="col s12 l12 margin-bottom-100-rem display-flex-important justify-content-center ">
+                  <button class="primary-button border-none-important position-relative margin-top-50-rem"
+                    (click)="addMarker()">
+                    Añadir
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col l8 m10 s12">
+            <div class="row display-flex justify-content-center flex-direction-row">
+              <div class="col l12" [formGroup]="formCreateMarker">
+                <h1 class="subtitle-style text-align-center cl-primary-color-theme-important">
+                  Mapa
+                </h1>
+                <div class="col s12 l12 margin-bottom-100-rem" id="content-map">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="idCardSelected.id == 2">
+      <div class="primary-card">
+        <h5 class="subtitle-style">{{idCardSelected.name}}</h5>
+
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #required>
+  <b class="cl-typographyDanger-background-status">*</b>
+</ng-template>

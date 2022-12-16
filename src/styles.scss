@@ -1,1 +1,121 @@
-/* You can add global styles to this file, and also import other style files */
+@use "src/styles/implementation/theme" as theme-implementation;
+@use "src/styles/components/floating-button";
+@use "src/styles/components/typography";
+@use "src/styles/components/tooltip";
+@use "src/styles/components/select";
+@use "src/styles/components/layout";
+@use "src/styles/components/header";
+@use "src/styles/components/button";
+@use "src/styles/components/table";
+@use "src/styles/components/card";
+@use "src/styles/components/form";
+@use "src/styles/components/list";
+@use "src/styles/components/tab";
+@use "src/styles/viewport";
+@use "src/styles/helpers";
+@use "src/styles/mixins";
+@use "src/styles/theme";
+
+* {
+  box-sizing: border-box;
+  &::after,
+  &::before {
+    box-sizing: inherit;
+  }
+}
+
+html {
+  --mdc-typography-font-family: "Roboto", sans-serif;
+  font-family: var(--mdc-typography-font-family);
+  font-size: var(--font, 15px);
+}
+
+body {
+  background: theme.get-theme-value(theme, septenary, background);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  margin: 0;
+  &::-webkit-scrollbar {
+    background: #3b3e48;
+    width: 0.5em;
+  }
+
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0.25rem;
+    overflow: visible;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    // background: theme.get-theme-value(palette, primary, background);
+    background-color: #63656e;
+    &:hover {
+      background-color: #9699a4;
+    }
+  }
+}
+
+.scroll-box {
+  overflow-y: auto;
+  width: 100%;
+  &::-webkit-scrollbar {
+    background: #3b3e48;
+    width: 0.5em;
+  }
+
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-thumb {
+    // border-radius: 0.25rem;
+    overflow: visible;
+    height: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    // background: theme.get-theme-value(palette, primary, background);
+    background-color: #63656e;
+    &:hover {
+      background-color: #9699a4;
+    }
+  }
+}
+
+[tabindex] {
+  outline: none;
+}
+
+.swal2-popup {
+  &.swal2-modal {
+    background-color: theme.get-theme-value(
+      theme,
+      primary,
+      background
+    ) !important;
+  }
+  &.swal2-toast {
+    box-shadow: none !important;
+    & .swal2-title {
+      color: theme.get-theme-value(theme, primary, color);
+      font-size: 0.85rem !important;
+    }
+  }
+}
+
+.primary-background-gradient {
+  background: linear-gradient(
+    to right,
+    theme.get-theme-value(palette, primary, background),
+    theme.get-theme-value(palette, secondary, background)
+  ) !important;
+  color: theme.get-theme-value(palette, primary, color) !important;
+}
+
+.sidebar {
+  box-shadow: 0.5rem 0 0 rgb(0 0 0 / 20%);
+  border-radius: 0 1rem 1rem 0;
+  transition: all 0.5s ease;
+  -ms-overflow-style: none;
+  height: 100vh !important;
+  width: 100%;
+  scrollbar-width: none;
+}
