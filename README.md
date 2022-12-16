@@ -2,7 +2,7 @@
 
 # Clonar
 
-git clone https://github.com/julianstt8/front_reservas.git
+git clone https://github.com/julianstt8/front_maps.git
 
 # Instalaciones ANGULAR
 
