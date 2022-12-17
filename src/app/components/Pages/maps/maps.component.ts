@@ -2,6 +2,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MapasWebService } from '../../../services/WebServices/mapas-web.service';
 import { SwalPopupService } from '../../../services/LocalServices/swal-popup.service';
 import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-maps',
@@ -12,7 +13,7 @@ export class MapsComponent implements OnInit {
 
   /** Formulario reactivo */
   public formCreateMarker!: FormGroup;
-  public formInitSession!: FormGroup;
+  public formEditMarker!: FormGroup;
 
 
   public markers: any;
@@ -20,25 +21,21 @@ export class MapsComponent implements OnInit {
   public listCards = [
     {
       id: 0,
-      name: 'DASHBOARD',
-      color: '#9F84F9',
-    },
-    {
-      id: 1,
       name: 'MAPA',
       color: '#3ABCB1',
     },
     {
-      id: 2,
+      id: 1,
       name: 'LISTA',
-      color: '#3ABCB1',
+      color: '#9F84F9',
     }
   ];
 
   /** Id del card seleccionado */
   public idCardSelected: any = this.listCards[0];
 
-
+  /** Marker editable */
+  public editMarkerSelected: any = null;
 
   constructor(
     private mapassWeb: MapasWebService,
@@ -48,11 +45,15 @@ export class MapsComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    this.getMarker();
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.markers, event.previousIndex, event.currentIndex);
   }
 
   init = () => {
     this.initForms();
+    this.getMarker();
   }
 
   /** Inicializa los formularios */
@@ -61,9 +62,10 @@ export class MapsComponent implements OnInit {
       lat: ['', [Validators.required]],
       lon: ['', [Validators.required]],
     });
-    this.formInitSession = this.formBuilder.group({
-      cedula: ['', [Validators.required]],
-      contrasena: ['', Validators.required],
+    this.formEditMarker = this.formBuilder.group({
+      id_marker: ['', Validators.required],
+      lat: ['', [Validators.required]],
+      lon: ['', [Validators.required]],
     });
   };
 
@@ -76,13 +78,67 @@ export class MapsComponent implements OnInit {
     });
   }
 
+  /** Añadir punto */
   addMarker = () => {
-    this.mapassWeb.addMarker(this.formCreateMarker.value).subscribe((response: any) => {
-      if (response['status'] == 1) {
-        this.toast.setToastPopup('Punto añadido correctamente', 'success');
+    if (this.formCreateMarker.valid) {
+      this.mapassWeb.addMarker(this.formCreateMarker.value).subscribe((response: any) => {
+        if (response['status'] == 1) {
+          this.toast.setToastPopup('Punto añadido correctamente', 'success');
+          this.formCreateMarker.reset();
+          this.getMarker();
+        } else {
+          this.toast.setToastPopup('No se pudo añadir', 'danger');
+        }
+      })
+    } else {
+      this.toast.setToastPopup('Valida todos los campos requeridos.*', 'danger');
+    }
+  }
+
+  /** Editar punto */
+  editMarker = () => {
+    if (this.formEditMarker.valid) {
+      if (this.formEditMarker.get("lat")?.value != this.editMarkerSelected.latitud || this.formEditMarker.get("lon")?.value != this.editMarkerSelected.longitud) {
+        this.mapassWeb.editMarker(this.formEditMarker.value).subscribe((res: any) => {
+          if (res.status == 1) {
+            this.toast.setToastPopup('Punto añadido correctamente', 'success');
+            this.getMarker();
+          } else {
+            this.toast.setToastPopup('No se pudo añadir', 'danger');
+          }
+          this.editMarkerSelected = null;
+        })
       } else {
-        this.toast.setToastPopup('No se pudo añadir', 'danger');
+        this.toast.setToastPopup('Los valores no han cambiado...', 'danger');
+      }
+    } else {
+      this.toast.setToastPopup('Valida todos los campos requeridos.*', 'danger');
+    }
+  }
+
+  /** Eliminar punto */
+  deleteMarker = (id: any) => {
+    this.toast.showModalConfirm('Esta seguro de eliminar este marcador?', '', (response: any) => {
+      if (response.isConfirmed) {
+        const params = new FormData();
+        params.append("id_marker", id);
+        this.mapassWeb.deleteMarker(params).subscribe((res: any) => {
+          if (res["status"] == 1) {
+            this.toast.setToastPopup('Punto eliminado satifactoriamente!', 'success');
+            this.getMarker();
+          } else {
+            this.toast.setToastPopup('No se pudo eliminar', 'danger');
+          }
+        })
       }
     })
+  }
+
+  /** Inicializar formulario con valores de punto a editar */
+  setFormEditMarker = (marker: any) => {
+    this.editMarkerSelected = marker;
+    this.formEditMarker.get("id_marker")?.setValue(marker.id_marker);
+    this.formEditMarker.get("lat")?.setValue(+marker.latitud);
+    this.formEditMarker.get("lon")?.setValue(+marker.longitud);
   }
 }

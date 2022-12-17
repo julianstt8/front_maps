@@ -15,5 +15,5 @@ npm install
 
 ## Levantar servidor
 
-Se debe cambiar la IP `192.168.80.11` que corresponde a la mía en los environment por la IP correspondiente a su PC (abrir CMD, escribir ipconfig y te arrojara la ip de su pc).
+Se debe cambiar la IP `192.168.80.11` que corresponde a la mía en los environment por la IP correspondiente a su PC (abrir CMD, escribir ipconfig y te arrojara la ip de su pc esta pones reemplazando la mía).
 Luego ejecutar el comando `npm start` este levantara el servidor en esta IP.

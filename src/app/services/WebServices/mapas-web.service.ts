@@ -13,9 +13,9 @@ export class MapasWebService {
 
   public getMarkerById = (params: any) => this.http.get(`${this.url}/getMarkerById`, params);
 
-  public deleteMarker = (params: any) => this.http.delete(`${this.url}/deleteMarker`, params);
+  public deleteMarker = (params: any) => this.http.post(`${this.url}/deleteMarker`, params);
 
-  public editMarker = (params: any) => this.http.put(`${this.url}/editMarker`, params);
+  public editMarker = (params: any) => this.http.post(`${this.url}/editMarker`, params);
 
   public addMarker = (params: any) => this.http.post(`${this.url}/addMarker`, params);
 
