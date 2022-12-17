@@ -11,7 +11,7 @@ Angular CLI version 13.3.0.
 
 ## Instalar dependencias
 
-Abre el CMD, ingresa a la carpeta del proyecto Front-End y ejecuta el comando `npm install`1
+Abre el CMD, ingresa a la carpeta del proyecto Front-End y ejecuta el comando `npm install`
 
 ## Levantar servidor
 
