@@ -1,17 +1,7 @@
-@use "src/styles/implementation/theme" as theme-implementation;
-@use "src/styles/components/floating-button";
 @use "src/styles/components/typography";
-@use "src/styles/components/tooltip";
-@use "src/styles/components/select";
-@use "src/styles/components/layout";
-@use "src/styles/components/header";
 @use "src/styles/components/button";
 @use "src/styles/components/table";
 @use "src/styles/components/card";
-@use "src/styles/components/form";
-@use "src/styles/components/list";
-@use "src/styles/components/tab";
-@use "src/styles/viewport";
 @use "src/styles/helpers";
 @use "src/styles/mixins";
 @use "src/styles/theme";
@@ -22,6 +12,25 @@
   &::before {
     box-sizing: inherit;
   }
+}
+
+.map-container {
+  position: absolute;
+  margin: 30px;
+  left: 500px;
+  bottom: 0;
+  right: 0;
+  top: 0;
+}
+
+.map-frame {
+  border-radius: 0.33rem;
+  border: 1px solid #C8C8C8;
+  height: 85vh;
+}
+
+#map {
+  height: 100%;
 }
 
 html {
@@ -120,5 +129,11 @@ body {
   scrollbar-width: none;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

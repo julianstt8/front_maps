@@ -5,7 +5,7 @@
       <ng-container *ngFor="let card of listCards; index as i">
         <div class="col s12 m12 l12 margin-bottom-100-rem">
           <div class="primary-card display-flex align-items-center border-card hoverable-card"
-            (click)="idCardSelected = card" [ngStyle]="{'border-color':card.color + '66',
+            (click)="changeTab(card);" [ngStyle]="{'border-color':card.color + '66',
               background: card.color + '66' }">
             <p
               class="text-style margin-vertical-0 lower-font font-weight-700-important cl-primary-color-theme-important">
@@ -53,11 +53,14 @@
           </div>
           <div class="col l8 m10 s12">
             <div class="row display-flex justify-content-center flex-direction-row">
-              <div class="col l12" [formGroup]="formCreateMarker">
+              <div class="col l12 display-flex flex-direction-row" [formGroup]="formCreateMarker">
                 <h1 class="subtitle-style text-align-center cl-primary-color-theme-important">
                   Mapa
                 </h1>
-                <div class="col s12 l12 margin-bottom-100-rem" id="content-map">
+                <div class="col s12 l12 margin-bottom-100-rem">
+                  <div class="map-frame border-radius">
+                    <div id="map"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -67,64 +70,84 @@
     </ng-container>
     <ng-container *ngIf="idCardSelected.id == 1">
       <div class="primary-card">
-        <div class="row">
+        <div class="row" style="height: 92vh">
           <div class="col l6">
-            <h1 class="subtitle-style cl-primary-color-theme-important">
-              Listado de marcadores
-            </h1>
-            <p class="text-style text-muted">Ordena tus marcadores arrastrandolos.</p>
-            <div class="row scroll-box" style="height: 80vh">
-              <table class="primary-table table-intermittent full-width">
-                <thead>
-                  <tr>
-                    <th class="text-align-center">Id</th>
-                    <th class="text-align-center">Latitud</th>
-                    <th class="text-align-center">Longitud</th>
-                  </tr>
-                </thead>
-                <tbody cdkDropList (cdkDropListDropped)="drop($event)">
-                  <tr *ngFor="let item of markers" cdkDrag>
-                    <td class="text-align-center">{{item.id_marker}}</td>
-                    <td class="text-align-center">{{item.latitud}}</td>
-                    <td class="text-align-center">{{item.longitud}}</td>
-                    <td class="text-align-center display-flex justify-content-center flex-direction-row">
-                      <button
-                        class="primary-button button-success button-sm border-none-important position-relative margin-right-50-rem"
-                        (click)="setFormEditMarker(item)">
-                        Editar
-                      </button>
-                      <button class="primary-button button-danger button-sm border-none-important position-relative"
-                        (click)="deleteMarker(item.id_marker)">
-                        Eliminar
-                      </button>
-                    </td>
-                  </tr>
-                  <ng-container *ngIf="markers.length === 0">
+            <div class="col l12">
+              <h1 class="subtitle-style cl-primary-color-theme-important">
+                Marcadores
+              </h1>
+            </div>
+            <div class="col l12 align-content-center display-flex flex-direction-row">
+              <p class="text-style text-muted">Para ver el listado da click en "Ver listado" y puedes ordenar tus
+                marcadores arrastrandolos.</p>
+              <button
+                class="primary-button button-sm button-danger border-none-important position-relative margin-top-50-rem margin-right-50-rem"
+                (click)="getMarker()">
+                Actualizar listado
+              </button>
+            </div>
+            <mat-expansion-panel class="padding" [expanded]="listActive === true" (opened)="listActive = true"
+              (closed)="listActive = false;editMarkerSelected = null;" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="display-flex justify-content-space-between">
+                  <h5 class="subtitle-style cl-primary-color-theme-important">Listado</h5>
+                  <i class="fa fa-chevron-down cl-primary-color-theme-important"></i>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll-box" style="height: 65vh">
+                <table class="primary-table table-intermittent full-width">
+                  <thead>
                     <tr>
-                      <td class="text-align-center" colspan="3">
-                        <h1>No hay informacion</h1>
+                      <th class="text-align-center">Id</th>
+                      <th class="text-align-center">Latitud</th>
+                      <th class="text-align-center">Longitud</th>
+                      <th class="text-align-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+                    <tr *ngFor="let item of markers" cdkDrag>
+                      <td class="text-align-center">{{item.id_marker}}</td>
+                      <td class="text-align-center">{{item.latitud}}</td>
+                      <td class="text-align-center">{{item.longitud}}</td>
+                      <td class="text-align-center display-flex justify-content-center flex-direction-row">
+                        <button
+                          class="primary-button button-success button-sm border-none-important position-relative margin-right-50-rem"
+                          (click)="setFormEditMarker(item)">
+                          Editar
+                        </button>
+                        <button class="primary-button button-danger button-sm border-none-important position-relative"
+                          (click)="deleteMarker(item.id_marker)">
+                          Eliminar
+                        </button>
                       </td>
                     </tr>
-                  </ng-container>
-                </tbody>
-              </table>
-            </div>
+                    <ng-container *ngIf="markers.length === 0">
+                      <tr>
+                        <td class="text-align-center" colspan="3">
+                          <h1>No hay informacion</h1>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </mat-expansion-panel>
           </div>
           <div class="col l6">
-            <ng-container *ngIf="editMarkerSelected != null">
+            <ng-container *ngIf="(editMarkerSelected != null && listActive == true)">
               <div class="col l12" [formGroup]="formEditMarker">
                 <h1 class="subtitle-style text-align-center cl-primary-color-theme-important">
                   Insertar marcador
                 </h1>
                 <div class="col s12 l12 margin-bottom-100-rem">
-                  <div class="col s12 l6">
+                  <div class="col s12 l12">
                     <label class="text-style cl-primary-color-theme-important">Latitud</label>
                     <label class="primary-form-field width-100">
                       <input type="text" class="primary-input" formControlName="lat" #lat>
                       <ng-container [ngTemplateOutlet]="required"></ng-container>
                     </label>
                   </div>
-                  <div class="col s12 l6">
+                  <div class="col s12 l12">
                     <label class="text-style cl-primary-color-theme-important">Longitud</label>
                     <label class="primary-form-field width-100">
                       <input type="text" class="primary-input" formControlName="lon" #lon>
