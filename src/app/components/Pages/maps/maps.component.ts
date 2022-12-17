@@ -136,6 +136,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
 
   /** Trae la información */
   getMarker = () => {
+    this.markers = [];
     this.mapassWeb.getMarker().subscribe((response: any) => {
       if (response['status'] == 1) {
         this.markers = response['message'];
